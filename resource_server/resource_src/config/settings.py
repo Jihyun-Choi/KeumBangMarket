@@ -43,6 +43,7 @@ DJANGO_APPS = [
 # Apps from external packages
 PACKAGE_APPS = [
     "rest_framework",
+    "drf_yasg",
 ]
 
 # Apps defined within the project
