@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  auth_server:
+    working_dir: /app
+    build:
+      context: ./auth_server
+      dockerfile: Dockerfile
+    container_name: auth_server
+    command: >
+      bash -c "pipenv run python manage.py migrate &&
+      pipenv run python manage.py runserver 0.0.0.0:8888"
+    volumes:
+      - ./auth_server/auth_src:/app
+    ports:
+      - "8888:8888"
+    env_file:
+      - ./auth_server/auth_src/.env
+    depends_on:
+      auth_db:
+        condition: service_healthy  # auth_db가 healthcheck를 통과해야 auth_server 실행
+  resource_server:
+    working_dir: /app
+    build:
+      context: ./resource_server
+      dockerfile: Dockerfile
+    container_name: resource_server
+    command: >
+      bash -c "pipenv run python manage.py migrate &&
+      pipenv run python manage.py runserver 0.0.0.0:9999"
+    volumes:
+      - ./resource_server/resource_src:/app
+    ports:
+      - "9999:9999"
+    env_file:
+      - ./resource_server/resource_src/.env
+    depends_on:
+      resource_db:
+        condition: service_healthy  # resource_db가 healthcheck를 통과해야 resource_server 실행
+
+  auth_db:
+    image: mariadb:latest
+    container_name: auth_db
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${AUTH_DB_NAME}
+      MARIADB_USER: ${AUTH_DB_USER}
+      MARIADB_PASSWORD: ${AUTH_DB_PASSWORD}
+    volumes:
+      - auth_db_data:/var/lib/mysql
+    ports:
+      - "${AUTH_DB_HOST_PORT}:${AUTH_DB_CONTAINER_PORT}"
+    env_file:
+      - ./.env
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh --su-mysql --connect --innodb_initialized"]
+      interval: 10s
+      retries: 5
+      timeout: 30s
+
+  resource_db:
+    image: mariadb:latest
+    container_name: resource_db
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${RESOURCE_DB_NAME}
+      MARIADB_USER: ${RESOURCE_DB_USER}
+      MARIADB_PASSWORD: ${RESOURCE_DB_PASSWORD}
+    volumes:
+      - resource_db_data:/var/lib/mysql
+    ports:
+      - "${RESOURCE_DB_HOST_PORT}:${RESOURCE_DB_CONTAINER_PORT}"
+    env_file:
+      - ./.env
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh --su-mysql --connect --innodb_initialized"]
+      interval: 10s
+      retries: 5
+      timeout: 30s
+
+volumes:
+  auth_db_data:
+  resource_db_data:

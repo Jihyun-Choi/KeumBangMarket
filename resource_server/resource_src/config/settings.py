@@ -22,6 +22,7 @@ env = environ.Env()
 env.read_env(f"{BASE_DIR}/.env")
 
 SECRET_KEY = env("SECRET_KEY")
+USE_DOCKER = env("USE_DOCKER")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,12 +87,24 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if USE_DOCKER:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": env("RESOURCE_DB_NAME"),
+            "USER": env("RESOURCE_DB_USER"),
+            "PASSWORD": env("RESOURCE_DB_PASSWORD"),
+            "HOST": env("RESOURCE_DB_HOST"),
+            "PORT": env("RESOURCE_DB_PORT"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation

@@ -30,12 +30,58 @@
 ```
 
 ### 프로젝트 폴더 바로 아래에 .env 파일을 만들고 아래 내용을 넣어주세요.
+- ./.env
+```
+# Root password for both DBs
+MARIADB_ROOT_PASSWORD=
+
+# Ports for host access (호스트 포트)
+AUTH_DB_HOST_PORT=
+RESOURCE_DB_HOST_PORT=
+
+# Authentication Database (auth_db)
+AUTH_DB_NAME=
+AUTH_DB_USER=
+AUTH_DB_PASSWORD=
+AUTH_DB_HOST=   # Docker Compose에서 컨테이너 이름을 호스트로 사용
+AUTH_DB_CONTAINER_PORT=   # 컨테이너 내부 포트는 항상 3306
+
+# Resource Database (resource_db)
+RESOURCE_DB_NAME=
+RESOURCE_DB_USER=
+RESOURCE_DB_PASSWORD=
+RESOURCE_DB_HOST=   # Docker Compose에서 컨테이너 이름을 호스트로 사용
+RESOURCE_DB_CONTAINER_PORT=   # 컨테이너 내부 포트는 항상 3306
+
+```
+
+- ./auth_server/auth_src/.env
 ```
 SECRET_KEY=your-secret-key
+USE_DOCKER=True
+AUTH_DB_NAME=
+AUTH_DB_USER=
+AUTH_DB_PASSWORD=
+AUTH_DB_HOST=
+AUTH_DB_PORT=
 ```
+
+- ./resource_server/resource_src/.env
+```
+SECRET_KEY=your-secret-key
+USE_DOCKER=True
+RESOURCE_DB_NAME=
+RESOURCE_DB_USER=
+RESOURCE_DB_PASSWORD=
+RESOURCE_DB_HOST=
+RESOURCE_DB_PORT=
+```
+
 
 ### 프로젝트 환경설정
 아래의 명령어를 순서대로 실행해주세요.
+
+- Django project 실행 시
 ```shell
 # 1. 가상환경 만들기 (초기 설정 시 1회 실행)
 > pipenv install
@@ -51,6 +97,27 @@ SECRET_KEY=your-secret-key
 > python manage.py migrate
 > python manage.py runserver
 ```
+
+```shell
+# 컨테이너 빌드
+> docker-compose up --build
+
+# 백그라운드 실행
+> docker-compose up --build
+
+> docker-compose down
+> docker-compose build --no-cache
+> docker-compose up -d
+
+# auth_server의 makemigrations 및 migrate
+> docker-compose exec auth_server pipenv run python manage.py makemigrations
+> docker-compose exec auth_server pipenv run python manage.py migrate
+
+# resource_server의 makemigrations 및 migrate
+> docker-compose exec resource_server pipenv run python manage.py makemigrations
+> docker-compose exec resource_server pipenv run python manage.py migrate
+```
+
 
 
 ### 개발 명령어 모음
