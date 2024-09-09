@@ -30,9 +30,53 @@
 ```
 
 ### 프로젝트 폴더 바로 아래에 .env 파일을 만들고 아래 내용을 넣어주세요.
+- ./.env
+```
+# Root password for both DBs
+MARIADB_ROOT_PASSWORD=
+
+# Ports for host access (호스트 포트)
+AUTH_DB_HOST_PORT=
+RESOURCE_DB_HOST_PORT=
+
+# Authentication Database (auth_db)
+AUTH_DB_NAME=
+AUTH_DB_USER=
+AUTH_DB_PASSWORD=
+AUTH_DB_HOST=   # Docker Compose에서 컨테이너 이름을 호스트로 사용
+AUTH_DB_CONTAINER_PORT=   # 컨테이너 내부 포트는 항상 3306
+
+# Resource Database (resource_db)
+RESOURCE_DB_NAME=
+RESOURCE_DB_USER=
+RESOURCE_DB_PASSWORD=
+RESOURCE_DB_HOST=   # Docker Compose에서 컨테이너 이름을 호스트로 사용
+RESOURCE_DB_CONTAINER_PORT=   # 컨테이너 내부 포트는 항상 3306
+
+```
+
+- ./auth_server/auth_src/.env
 ```
 SECRET_KEY=your-secret-key
+USE_DOCKER=True
+AUTH_DB_NAME=
+AUTH_DB_USER=
+AUTH_DB_PASSWORD=
+AUTH_DB_HOST=
+AUTH_DB_PORT=
 ```
+
+- ./resource_server/resource_src/.env
+```
+SECRET_KEY=your-secret-key
+USE_DOCKER=True
+RESOURCE_DB_NAME=
+RESOURCE_DB_USER=
+RESOURCE_DB_PASSWORD=
+RESOURCE_DB_HOST=
+RESOURCE_DB_PORT=
+```
+
 
 ### 프로젝트 환경설정
 아래의 명령어를 순서대로 실행해주세요.
