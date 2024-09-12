@@ -9,6 +9,9 @@ class UserAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "username",
+        "created_at",
+        "updated_at",
+        "deleted_at",
         "is_active",
         "is_staff",
         "is_superuser",

@@ -177,4 +177,7 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": env("SECRET_KEY"),
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "UPDATE_LAST_LOGIN": True,
+    "USER_ID_FIELD": "id",  # User 모델에서 ID를 사용
+    "USER_ID_CLAIM": "user_id",  # JWT에 user_id 필드로 저장
 }
