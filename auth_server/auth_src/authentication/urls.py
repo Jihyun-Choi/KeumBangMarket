@@ -6,6 +6,7 @@ app_name = "authentication"
 router = DefaultRouter()
 
 urlpatterns = [
+    path("login/", LoginAPIView.as_view(), name="login"),
 ]
 
 urlpatterns += router.urls
