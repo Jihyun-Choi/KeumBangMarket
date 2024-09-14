@@ -1,3 +1,4 @@
+# settings.py
 """
 Django settings for config project.
 
@@ -10,6 +11,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
 import environ
 from pathlib import Path
 
@@ -47,11 +49,15 @@ DJANGO_APPS = [
 # Apps from external packages
 PACKAGE_APPS = [
     "rest_framework",
+    "rest_framework.authtoken",
     "drf_yasg",
+    "rest_framework_simplejwt.token_blacklist",  # JWT 블랙리스트
 ]
 
 # Apps defined within the project
-PROJECT_APPS = []
+PROJECT_APPS = [
+    "authentication",
+]
 
 # Combine all apps into a single list
 INSTALLED_APPS = DJANGO_APPS + PACKAGE_APPS + PROJECT_APPS
@@ -151,6 +157,27 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# authentication 관련 설정 추가
+
+AUTH_USER_MODEL = "authentication.User"
+
+SITE_ID = 1
+
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),  # jwt 설정
     "EXCEPTION_HANDLER": "config.exceptions.custom_exception_handler",  # 에러 핸들러 설정
+}
+
+# JWT 설정
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": env("SECRET_KEY"),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "UPDATE_LAST_LOGIN": True,
+    "USER_ID_FIELD": "id",  # User 모델에서 ID를 사용
+    "USER_ID_CLAIM": "user_id",  # JWT에 user_id 필드로 저장
 }
