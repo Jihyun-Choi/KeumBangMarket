@@ -13,4 +13,5 @@ class UserDetailSerializer(UserSerializer):
             "deleted_at",
             "is_active",
             "is_staff",
+            "is_superuser",
         ]
