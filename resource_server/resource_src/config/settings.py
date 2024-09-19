@@ -48,7 +48,9 @@ PACKAGE_APPS = [
 ]
 
 # Apps defined within the project
-PROJECT_APPS = []
+PROJECT_APPS = [
+    "user",
+]
 
 # Combine all apps into a single list
 INSTALLED_APPS = DJANGO_APPS + PACKAGE_APPS + PROJECT_APPS
