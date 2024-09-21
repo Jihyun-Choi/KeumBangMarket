@@ -12,6 +12,7 @@ class UserAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
         "deleted_at",
+        "is_deleted",
         "is_active",
         "is_staff",
         "is_superuser",

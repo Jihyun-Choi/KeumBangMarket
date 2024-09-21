@@ -13,6 +13,7 @@ class AddressAdmin(admin.ModelAdmin):
         "postal_code",
         "created_at",
         "deleted_at",
+        "is_deleted",
     )
     search_fields = (
         "user__username",
