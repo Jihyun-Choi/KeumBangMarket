@@ -50,6 +50,7 @@ PACKAGE_APPS = [
 # Apps defined within the project
 PROJECT_APPS = [
     "user",
+    "address",
 ]
 
 # Combine all apps into a single list

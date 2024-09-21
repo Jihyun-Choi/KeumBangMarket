@@ -42,6 +42,7 @@ urlpatterns = [
         name="schema-swagger-ui",
     ),
     path("api/user/", include("user.urls")),
+    path("api/address/", include("address.urls")),
     path("admin/", admin.site.urls),
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
